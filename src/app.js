@@ -18,4 +18,15 @@ app.get("/users", (req, res) => {
     res.status(200).json(usuarios);
 });
 
+app.get("/users/:id", (req, res) => {
+    const id = parseInt(req.params.id);
+    const usuario = usuarios.find((u) => u.id === id);
+
+    if (usuario) {
+        res.status(200).json(usuario);
+    } else {
+        res.sendStatus(404);
+    }
+});
+
 module.exports = app;
