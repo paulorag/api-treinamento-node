@@ -20,3 +20,17 @@ describe("GET /users", () => {
         expect(response.body[0]).toHaveProperty("nome");
     });
 });
+
+describe("get /users/:id", () => {
+    it("deve retornar um usuário específico e status 200", async () => {
+        const response = await request(app).get("/users/1");
+
+        expect(response.statusCode).toBe(200);
+        expect(response.body).toEqual({ id: 1, nome: "Paulo Roberto" });
+    });
+
+    it("deve retonar status 404 se o usuário não for encontrado", async () => {
+        const response = await request(app).get("/users/99");
+        expect(response.statusCode).toBe(404);
+    });
+});
