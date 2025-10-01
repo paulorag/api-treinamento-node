@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+app.use(express.json());
 const usuarios = [
     { id: 1, nome: "Paulo Roberto" },
     { id: 2, nome: "Ana Carolina" },
@@ -27,6 +28,25 @@ app.get("/users/:id", (req, res) => {
     } else {
         res.sendStatus(404);
     }
+});
+
+app.post("/users", (req, res) => {
+    const { nome } = req.body;
+    if (!nome) {
+        return res.status(400).json({ erro: "O nome é obrigatório" });
+    }
+
+    const novoId =
+        usuarios.length > 0 ? usuarios[usuarios.length - 1].id + 1 : 1;
+
+    const novoUsuario = {
+        id: novoId,
+        nome: nome,
+    };
+
+    usuarios.push(novoUsuario);
+
+    res.status(201).json(novoUsuario);
 });
 
 module.exports = app;

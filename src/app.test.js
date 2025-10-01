@@ -21,7 +21,7 @@ describe("GET /users", () => {
     });
 });
 
-describe("get /users/:id", () => {
+describe("GET /users/:id", () => {
     it("deve retornar um usuário específico e status 200", async () => {
         const response = await request(app).get("/users/1");
 
@@ -32,5 +32,23 @@ describe("get /users/:id", () => {
     it("deve retonar status 404 se o usuário não for encontrado", async () => {
         const response = await request(app).get("/users/99");
         expect(response.statusCode).toBe(404);
+    });
+});
+
+describe("POST /users", () => {
+    it("deve criar um novo usuário e retornar o objeto do usuário", async () => {
+        const novoUsuario = { nome: "Carlos Andrade" };
+        const response = await request(app).post("/users").send(novoUsuario);
+
+        expect(response.statusCode).toBe(201);
+        expect(response.body).toHaveProperty("id");
+        expect(response.body.nome).toBe("Carlos Andrade");
+    });
+
+    it("deve retornar erro 400 se o nome não for fornecido", async () => {
+        const response = await request(app).post("/users").send({});
+
+        expect(response.statusCode).toBe(400);
+        expect(response.body).toEqual({ erro: "O nome é obrigatório" });
     });
 });
