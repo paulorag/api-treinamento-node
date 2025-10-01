@@ -67,4 +67,17 @@ app.put("/users/:id", (req, res) => {
     res.status(200).json(usuarios[usuarioIndex]);
 });
 
+app.delete("/users/:id", (req, res) => {
+    const id = parseInt(req.params.id);
+    const usuarioIndex = usuarios.findIndex((u) => u.id === id);
+
+    if (usuarioIndex === -1) {
+        return res.sendStatus(404);
+    }
+
+    usuarios.splice(usuarioIndex, 1);
+
+    res.sendStatus(204);
+});
+
 module.exports = app;

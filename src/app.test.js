@@ -80,3 +80,18 @@ describe("PUT /users/:id", () => {
         expect(response.statusCode).toBe(400);
     });
 });
+
+describe("DELETE /users/:id", () => {
+    it("deve remover um usuário e retornar status 204", async () => {
+        const response = await request(app).delete("/users/1");
+        expect(response.statusCode).toBe(204);
+
+        const userCheckResponse = await request(app).get("/users/1");
+        expect(userCheckResponse.statusCode).toBe(404);
+    });
+
+    it("deve retornar 404 se o usuário a ser deletado não existir", async () => {
+        const response = await request(app).delete("/users/99");
+        expect(response.statusCode).toBe(404);
+    });
+});
