@@ -52,3 +52,31 @@ describe("POST /users", () => {
         expect(response.body).toEqual({ erro: "O nome é obrigatório" });
     });
 });
+
+describe("PUT /users/:id", () => {
+    it("deve atualizar o nome de um usuário e retorna-lo", async () => {
+        const dadosAtualizados = { nome: "Paulo Ricardo" };
+        const response = await request(app)
+            .put("/users/1")
+            .send(dadosAtualizados);
+
+        expect(response.statusCode).toBe(200);
+        expect(response.body.id).toBe(1);
+        expect(response.body.nome).toBe("Paulo Ricardo");
+    });
+
+    it("deve retornar 404 se o usuário não existir", async () => {
+        const dadosAtualizados = { nome: "Usuário Fantasma" };
+        const response = await request(app)
+            .put("/users/99")
+            .send(dadosAtualizados);
+
+        expect(response.statusCode).toBe(404);
+    });
+
+    it("deve retornar 400 se o nome não for fornecido no corpo", async () => {
+        const response = await request(app).put("/users/1").send({});
+
+        expect(response.statusCode).toBe(400);
+    });
+});
