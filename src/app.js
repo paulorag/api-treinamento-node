@@ -49,4 +49,22 @@ app.post("/users", (req, res) => {
     res.status(201).json(novoUsuario);
 });
 
+app.put("/users/:id", (req, res) => {
+    const id = parseInt(req.params.id);
+    const usuarioIndex = usuarios.findIndex((u) => u.id === id);
+
+    if (usuarioIndex === -1) {
+        return res.sendStatus(404);
+    }
+
+    const { nome } = req.body;
+    if (!nome) {
+        return res.status(400).json({ error: "O nome é obrigatório" });
+    }
+
+    usuarios[usuarioIndex].nome = nome;
+
+    res.status(200).json(usuarios[usuarioIndex]);
+});
+
 module.exports = app;
